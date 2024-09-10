@@ -4,7 +4,7 @@ from freegames import path
 
 car = path('car.gif')
 tiles = list(range(32)) * 2
-state = {'mark': None}
+state = {'mark': None, 'taps': 0}
 hide = [True] * 64
 
 def square(x, y):
@@ -31,6 +31,8 @@ def tap(x, y):
     "Update mark and hidden tiles based on tap."
     spot = index(x, y)
     mark = state['mark']
+
+    state['taps'] += 1 
 
     if mark is None or mark == spot or tiles[mark] != tiles[spot]:
         state['mark'] = spot
@@ -60,11 +62,16 @@ def draw():
         color('black')
         write(tiles[mark], font=('Arial', 30, 'normal'))
 
+    up()
+    goto(140, 200)  # Nueva posición fuera del tablero
+    color('black')
+    write(f'Taps: {state["taps"]}', font=('Arial', 20, 'normal'))
+
     update()
     ontimer(draw, 100)
 
 shuffle(tiles)
-setup(420, 420, 370, 0)
+setup(500, 500, 370, 0)
 addshape(car)
 hideturtle()
 tracer(False)
