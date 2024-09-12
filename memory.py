@@ -1,4 +1,4 @@
-from random import *
+from random import shuffle
 from turtle import *
 from freegames import path
 
@@ -40,6 +40,10 @@ def tap(x, y):
         hide[spot] = False
         hide[mark] = False
         state['mark'] = None
+
+    # Verifica si todas las fichas están destapadas
+    if all(not hidden for hidden in hide):
+        print("¡Has destapado todas las fichas! ¡Juego terminado!")
 
 def draw():
     "Draw image and tiles."
