@@ -1,14 +1,13 @@
 from random import shuffle
 from turtle import *
-from freegames import path
 
-car = path('car.gif')
-tiles = list(range(32)) * 2
+# Usar 32 emojis únicos para cubrir 64 fichas (duplicados para que haya pares)
+tiles = list('🍎🍊🍉🍇🍓🍒🍍🥥🍋🍑🥭🍌🍈🍐🍏🥝🍔🍟🍕🌭🍿🍫🍩🍪🍰🍦🍨🍧🍫🍬⭐🌻') * 2
 state = {'mark': None, 'taps': 0}
 hide = [True] * 64
 
 def square(x, y):
-    "Draw white square with black outline at (x, y)."
+    "Dibuja un cuadrado blanco con borde negro en (x, y)."
     up()
     goto(x, y)
     down()
@@ -20,19 +19,19 @@ def square(x, y):
     end_fill()
 
 def index(x, y):
-    "Convert (x, y) coordinates to tiles index."
+    "Convierte las coordenadas (x, y) en un índice de fichas."
     return int((x + 200) // 50 + ((y + 200) // 50) * 8)
 
 def xy(count):
-    "Convert tiles count to (x, y) coordinates."
+    "Convierte el índice de la ficha a coordenadas (x, y)."
     return (count % 8) * 50 - 200, (count // 8) * 50 - 200
 
 def tap(x, y):
-    "Update mark and hidden tiles based on tap."
+    "Actualiza la marca y las fichas ocultas en función del toque."
     spot = index(x, y)
     mark = state['mark']
 
-    state['taps'] += 1 
+    state['taps'] += 1
 
     if mark is None or mark == spot or tiles[mark] != tiles[spot]:
         state['mark'] = spot
@@ -44,13 +43,11 @@ def tap(x, y):
     # Verifica si todas las fichas están destapadas
     if all(not hidden for hidden in hide):
         print("¡Has destapado todas las fichas! ¡Juego terminado!")
+        print(f"Has completado el juego con {state['taps']} toques.")
 
 def draw():
-    "Draw image and tiles."
+    "Dibuja las fichas e imágenes."
     clear()
-    goto(0, 0)
-    shape(car)
-    stamp()
 
     for count in range(64):
         if hide[count]:
@@ -62,10 +59,11 @@ def draw():
     if mark is not None and hide[mark]:
         x, y = xy(mark)
         up()
-        goto(x + 27, y)
+        goto(x + 25, y + 10)  # Ajustar la posición del emoji
         color('black')
-        write(tiles[mark], align='center', font=('Arial', 30, 'normal'))
+        write(tiles[mark], align='center', font=('Arial', 30, 'normal'))  # Ajustar el tamaño de fuente para emojis
 
+    # Muestra el contador de toques
     up()
     goto(140, 200)  # Nueva posición fuera del tablero
     color('black')
@@ -76,7 +74,6 @@ def draw():
 
 shuffle(tiles)
 setup(500, 500, 370, 0)
-addshape(car)
 hideturtle()
 tracer(False)
 onscreenclick(tap)
